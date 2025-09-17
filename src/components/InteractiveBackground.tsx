@@ -39,14 +39,27 @@ export const InteractiveBackground: React.FC = () => {
       });
     }
 
+    // Check if dark mode is active
+    const isDarkMode = () => document.documentElement.classList.contains('dark');
+
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Create gradient background
+      // Create gradient background based on theme
       const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-      gradient.addColorStop(0, 'rgba(59, 130, 246, 0.05)');
-      gradient.addColorStop(0.5, 'rgba(147, 197, 253, 0.05)');
-      gradient.addColorStop(1, 'rgba(34, 197, 94, 0.05)');
+      
+      if (isDarkMode()) {
+        // Dark mode gradients
+        gradient.addColorStop(0, 'rgba(59, 130, 246, 0.15)');
+        gradient.addColorStop(0.3, 'rgba(147, 51, 234, 0.1)');
+        gradient.addColorStop(0.6, 'rgba(34, 197, 94, 0.08)');
+        gradient.addColorStop(1, 'rgba(168, 85, 247, 0.12)');
+      } else {
+        // Light mode gradients
+        gradient.addColorStop(0, 'rgba(59, 130, 246, 0.05)');
+        gradient.addColorStop(0.5, 'rgba(147, 197, 253, 0.05)');
+        gradient.addColorStop(1, 'rgba(34, 197, 94, 0.05)');
+      }
       
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -62,10 +75,15 @@ export const InteractiveBackground: React.FC = () => {
         if (particle.y < 0) particle.y = canvas.height;
         if (particle.y > canvas.height) particle.y = 0;
 
-        // Draw particle
+        // Draw particle with theme-aware colors
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(59, 130, 246, ${particle.opacity})`;
+        
+        if (isDarkMode()) {
+          ctx.fillStyle = `rgba(255, 255, 255, ${particle.opacity * 0.7})`;
+        } else {
+          ctx.fillStyle = `rgba(59, 130, 246, ${particle.opacity})`;
+        }
         ctx.fill();
       });
 

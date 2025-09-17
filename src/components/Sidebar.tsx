@@ -34,7 +34,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, userType }) 
 
   const adminItems = [
     { title: 'Dashboard', url: '/admin-dashboard', icon: Home },
-    { title: 'Resources', url: '/admin-dashboard/resources', icon: BookOpen },
     { title: 'Screening Tests', url: '/admin-dashboard/screening', icon: ClipboardList },
     { title: 'Results', url: '/admin-dashboard/results', icon: BarChart3 },
     { title: 'Student Requests', url: '/admin-dashboard/requests', icon: Users },

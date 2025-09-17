@@ -12,7 +12,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, user
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-wellness-calm/5 to-wellness-peaceful/10 relative">
+    <div className="min-h-screen bg-gradient-to-br from-background via-wellness-calm/5 to-wellness-peaceful/10 dark:from-background dark:via-wellness-calm/10 dark:to-wellness-peaceful/20 relative">
       <InteractiveBackground />
       <ThemeToggle />
       

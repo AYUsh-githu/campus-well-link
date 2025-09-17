@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { DashboardLayout } from '@/components/DashboardLayout';
+import { AIInterface } from '@/components/AIInterface';
+import { AIButton } from '@/components/AIButton';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -18,6 +20,7 @@ import { ShimmerCard } from '@/components/LoadingSpinner';
 export const StudentDashboard: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [progress, setProgress] = useState(0);
+  const [isAIOpen, setIsAIOpen] = useState(false);
 
   useEffect(() => {
     // Simulate loading
@@ -84,8 +87,9 @@ export const StudentDashboard: React.FC = () => {
   }
 
   return (
-    <DashboardLayout userType="student">
-      <div className="space-y-8 animate-fade-in">
+    <>
+      <DashboardLayout userType="student">
+        <div className="space-y-8 animate-fade-in">
         {/* Welcome Header */}
         <div className="glass-card p-8 text-center tilt-card">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-wellness-calm to-wellness-serene bg-clip-text text-transparent mb-4 text-reveal-item">
@@ -228,7 +232,14 @@ export const StudentDashboard: React.FC = () => {
             </CardContent>
           </Card>
         </div>
-      </div>
-    </DashboardLayout>
+        </div>
+      </DashboardLayout>
+
+      {/* AI Button */}
+      <AIButton onClick={() => setIsAIOpen(true)} />
+
+      {/* AI Interface */}
+      <AIInterface isOpen={isAIOpen} onToggle={() => setIsAIOpen(false)} />
+    </>
   );
 };
