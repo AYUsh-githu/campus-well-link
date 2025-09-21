@@ -9,6 +9,7 @@ import { StudentLogin } from "./pages/StudentLogin";
 import { AdminLogin } from "./pages/AdminLogin";
 import { StudentDashboard } from "./pages/StudentDashboard";
 import { AdminDashboard } from "./pages/AdminDashboard";
+import { AIAssistant } from "./pages/AIAssistant";
 import { Resources } from "./pages/Resources";
 import { SelfCare } from "./pages/SelfCare";
 import { BookSession } from "./pages/BookSession";
@@ -32,6 +33,7 @@ const App = () => (
             <Route path="/student-login" element={<StudentLogin />} />
             <Route path="/admin-login" element={<AdminLogin />} />
             <Route path="/student-dashboard" element={<StudentDashboard />} />
+            <Route path="/student-dashboard/ai" element={<AIAssistant />} />
             <Route path="/student-dashboard/resources" element={<Resources />} />
             <Route path="/student-dashboard/self-care" element={<SelfCare />} />
             <Route path="/student-dashboard/booking" element={<BookSession />} />

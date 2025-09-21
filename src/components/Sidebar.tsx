@@ -11,7 +11,8 @@ import {
   AlertTriangle,
   LogOut,
   Menu,
-  X
+  X,
+  Brain
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -26,6 +27,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, userType }) 
   const navigate = useNavigate();
 
   const studentItems = [
+    { title: 'AI Assistant', url: '/student-dashboard/ai', icon: Brain },
     { title: 'Dashboard', url: '/student-dashboard', icon: Home },
     { title: 'Resources', url: '/student-dashboard/resources', icon: BookOpen },
     { title: 'Self-Care', url: '/student-dashboard/self-care', icon: Heart },
