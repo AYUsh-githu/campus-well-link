@@ -40,7 +40,7 @@ export const StudentDashboard: React.FC = () => {
       description: 'Access mental health resources and guides',
       icon: BookOpen,
       color: 'from-blue-500 to-blue-600',
-      action: () => window.location.href = '/resources',
+      action: () => window.location.href = '/student-dashboard/resources-hub',
     },
     {
       title: 'Self-Care Activities',
