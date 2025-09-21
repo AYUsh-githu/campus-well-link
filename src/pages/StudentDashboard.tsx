@@ -14,10 +14,12 @@ import {
   Award
 } from 'lucide-react';
 import { ShimmerCard } from '@/components/LoadingSpinner';
+import { BreathingExercise } from '@/components/BreathingExercise';
 
 export const StudentDashboard: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [progress, setProgress] = useState(0);
+  const [isBreathingOpen, setIsBreathingOpen] = useState(false);
 
   useEffect(() => {
     // Simulate loading
@@ -221,7 +223,11 @@ export const StudentDashboard: React.FC = () => {
                   Inhale for 4 counts, hold for 4, and exhale for 6. This simple 
                   technique can help reduce stress and improve focus.
                 </p>
-                <Button size="sm" className="btn-glass">
+                <Button 
+                  size="sm" 
+                  className="btn-glass"
+                  onClick={() => setIsBreathingOpen(true)}
+                >
                   Try Now
                 </Button>
               </div>
@@ -229,6 +235,11 @@ export const StudentDashboard: React.FC = () => {
           </Card>
         </div>
         </div>
+        
+        <BreathingExercise 
+          isOpen={isBreathingOpen} 
+          onClose={() => setIsBreathingOpen(false)} 
+        />
       </DashboardLayout>
   );
 };
