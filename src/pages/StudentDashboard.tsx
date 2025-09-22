@@ -49,7 +49,7 @@ export const StudentDashboard: React.FC = () => {
       description: 'Practice mindfulness and wellness exercises',
       icon: Heart,
       color: 'from-pink-500 to-rose-600',
-      action: () => window.location.href = '/self-care',
+      action: () => window.location.href = '/self-care-hub',
     },
     {
       title: 'Book Session',

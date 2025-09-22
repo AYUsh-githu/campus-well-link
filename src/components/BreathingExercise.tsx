@@ -6,11 +6,12 @@ import { X, Play, Pause, RotateCcw } from 'lucide-react';
 interface BreathingExerciseProps {
   isOpen: boolean;
   onClose: () => void;
+  duration?: number; // Optional duration in seconds
 }
 
-export const BreathingExercise: React.FC<BreathingExerciseProps> = ({ isOpen, onClose }) => {
+export const BreathingExercise: React.FC<BreathingExerciseProps> = ({ isOpen, onClose, duration = 60 }) => {
   const [isActive, setIsActive] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(60); // 1 minute default
+  const [timeLeft, setTimeLeft] = useState(duration);
   const [currentPhase, setCurrentPhase] = useState<'inhale' | 'hold' | 'exhale' | 'rest'>('inhale');
   const [cycleProgress, setCycleProgress] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -91,7 +92,7 @@ export const BreathingExercise: React.FC<BreathingExerciseProps> = ({ isOpen, on
 
   const resetExercise = () => {
     setIsActive(false);
-    setTimeLeft(60);
+    setTimeLeft(duration);
     setCurrentPhase('inhale');
     setCycleProgress(0);
   };
