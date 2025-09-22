@@ -56,7 +56,7 @@ export const StudentDashboard: React.FC = () => {
       description: 'Schedule a counseling appointment',
       icon: Calendar,
       color: 'from-green-500 to-emerald-600',
-      action: () => window.location.href = '/book-session',
+      action: () => window.location.href = '/student-dashboard/booking',
     },
   ];
 

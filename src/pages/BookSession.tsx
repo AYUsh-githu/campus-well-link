@@ -257,13 +257,13 @@ export const BookSession: React.FC = () => {
   return (
     <DashboardLayout userType="student">
       <div className="space-y-8 animate-fade-in">
-        {/* Header with Progress */}
+        {/* Header Banner */}
         <div className="glass-card p-8 text-center tilt-card">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-wellness-calm to-wellness-serene bg-clip-text text-transparent mb-4">
-            Book a Counseling Session
+            Schedule a Counseling Session
           </h1>
           <p className="text-xl text-muted-foreground mb-6">
-            Connect with a licensed mental health professional
+            We're here to support you on your mental wellness journey. Take the first step towards feeling better.
           </p>
           
           {/* Progress Steps */}
@@ -344,7 +344,7 @@ export const BookSession: React.FC = () => {
                       className="w-full btn-glass group-hover:bg-white/30"
                       disabled={!counselor.available}
                     >
-                      {counselor.available ? 'Select Counselor' : 'Currently Unavailable'}
+                      {counselor.available ? 'Book Now' : 'Currently Unavailable'}
                       {counselor.available && <ArrowRight className="w-4 h-4 ml-2" />}
                     </Button>
                   </CardContent>
@@ -356,7 +356,7 @@ export const BookSession: React.FC = () => {
 
         {/* Step 2: Select Date and Time */}
         {step === 2 && selectedCounselor && (
-          <div className="max-w-4xl mx-auto space-y-6">
+          <div className="max-w-6xl mx-auto space-y-6">
             <div className="text-center">
               <h2 className="text-2xl font-semibold mb-2">Select Date & Time</h2>
               <p className="text-muted-foreground">
@@ -364,7 +364,7 @@ export const BookSession: React.FC = () => {
               </p>
             </div>
             
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="grid lg:grid-cols-3 gap-8">
               {/* Calendar */}
               <Card className="glass-card border-0">
                 <CardHeader>
@@ -379,7 +379,7 @@ export const BookSession: React.FC = () => {
                     selected={selectedDate}
                     onSelect={handleDateSelect}
                     disabled={(date) => date < startOfToday()}
-                    className="rounded-md border-0"
+                    className="rounded-md border-0 pointer-events-auto"
                   />
                 </CardContent>
               </Card>
@@ -417,6 +417,55 @@ export const BookSession: React.FC = () => {
                   )}
                 </CardContent>
               </Card>
+
+              {/* Booking Summary Panel */}
+              <Card className="glass-card border-0">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <CheckCircle className="w-5 h-5" />
+                    Booking Summary
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-wellness-calm/10 to-wellness-peaceful/10">
+                      <User className="w-5 h-5 text-wellness-calm" />
+                      <div>
+                        <p className="font-medium text-sm">Counselor</p>
+                        <p className="text-sm text-muted-foreground">
+                          {counselors.find(c => c.id === selectedCounselor)?.name || 'Not selected'}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-wellness-serene/10 to-wellness-warm/10">
+                      <CalendarIcon className="w-5 h-5 text-wellness-serene" />
+                      <div>
+                        <p className="font-medium text-sm">Date</p>
+                        <p className="text-sm text-muted-foreground">
+                          {selectedDate ? format(selectedDate, 'MMMM d, yyyy') : 'Not selected'}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-wellness-peaceful/10 to-wellness-warm/10">
+                      <Clock className="w-5 h-5 text-wellness-peaceful" />
+                      <div>
+                        <p className="font-medium text-sm">Time</p>
+                        <p className="text-sm text-muted-foreground">
+                          {bookingData.timeSlot || 'Not selected'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="pt-4 border-t border-white/20">
+                    <p className="text-xs text-muted-foreground text-center">
+                      Complete your selection to proceed to session details
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
 
             <div className="flex justify-center gap-4">
@@ -429,7 +478,7 @@ export const BookSession: React.FC = () => {
 
         {/* Step 3: Session Details */}
         {step === 3 && (
-          <div className="max-w-2xl mx-auto space-y-6">
+          <div className="max-w-6xl mx-auto space-y-6">
             <div className="text-center">
               <h2 className="text-2xl font-semibold mb-2">Session Details</h2>
               <p className="text-muted-foreground">
@@ -438,73 +487,137 @@ export const BookSession: React.FC = () => {
                 }
               </p>
             </div>
+            
+            <div className="grid lg:grid-cols-3 gap-8">
+              {/* Session Details Form */}
+              <div className="lg:col-span-2 space-y-6">
 
-            <Card className="glass-card border-0">
-              <CardContent className="p-6 space-y-6">
-                {/* Session Type */}
-                <div>
-                  <label className="text-sm font-medium mb-3 block">Session Type</label>
-                  <div className="grid grid-cols-3 gap-3">
-                    {sessionTypes.map((type) => {
-                      const Icon = type.icon;
-                      return (
-                        <Button
-                          key={type.value}
-                          onClick={() => setBookingData(prev => ({ ...prev, sessionType: type.value as any }))}
-                          variant={bookingData.sessionType === type.value ? "default" : "outline"}
-                          className={`btn-glass flex flex-col items-center p-4 h-auto ${
-                            bookingData.sessionType === type.value ? 'bg-white/30' : ''
-                          }`}
-                        >
-                          <Icon className="w-6 h-6 mb-2" />
-                          <span className="text-sm">{type.label}</span>
-                        </Button>
-                      );
-                    })}
+              <Card className="glass-card border-0">
+                <CardContent className="p-6 space-y-6">
+                  {/* Session Type */}
+                  <div>
+                    <label className="text-sm font-medium mb-3 block">Session Type</label>
+                    <div className="grid grid-cols-3 gap-3">
+                      {sessionTypes.map((type) => {
+                        const Icon = type.icon;
+                        return (
+                          <Button
+                            key={type.value}
+                            onClick={() => setBookingData(prev => ({ ...prev, sessionType: type.value as any }))}
+                            variant={bookingData.sessionType === type.value ? "default" : "outline"}
+                            className={`btn-glass flex flex-col items-center p-4 h-auto ${
+                              bookingData.sessionType === type.value ? 'bg-white/30' : ''
+                            }`}
+                          >
+                            <Icon className="w-6 h-6 mb-2" />
+                            <span className="text-sm">{type.label}</span>
+                          </Button>
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
 
-                {/* Reason for Visit */}
-                <div>
-                  <label className="text-sm font-medium mb-3 block">Reason for Visit</label>
-                  <Select value={bookingData.reason} onValueChange={(value) => setBookingData(prev => ({ ...prev, reason: value }))}>
-                    <SelectTrigger className="glass-input">
-                      <SelectValue placeholder="Select a reason" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {reasonOptions.map((reason) => (
-                        <SelectItem key={reason} value={reason}>
-                          {reason}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+                  {/* Reason for Visit */}
+                  <div>
+                    <label className="text-sm font-medium mb-3 block">Reason for Visit</label>
+                    <Select value={bookingData.reason} onValueChange={(value) => setBookingData(prev => ({ ...prev, reason: value }))}>
+                      <SelectTrigger className="glass-input">
+                        <SelectValue placeholder="Select a reason" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {reasonOptions.map((reason) => (
+                          <SelectItem key={reason} value={reason}>
+                            {reason}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
 
-                {/* Additional Notes */}
-                <div>
-                  <label className="text-sm font-medium mb-3 block">Additional Notes (Optional)</label>
-                  <Textarea
-                    placeholder="Is there anything specific you'd like to discuss?"
-                    value={bookingData.notes}
-                    onChange={(e) => setBookingData(prev => ({ ...prev, notes: e.target.value }))}
-                    className="glass-input min-h-[100px]"
-                  />
-                </div>
-              </CardContent>
-            </Card>
+                  {/* Additional Notes */}
+                  <div>
+                    <label className="text-sm font-medium mb-3 block">Additional Notes (Optional)</label>
+                    <Textarea
+                      placeholder="Is there anything specific you'd like to discuss?"
+                      value={bookingData.notes}
+                      onChange={(e) => setBookingData(prev => ({ ...prev, notes: e.target.value }))}
+                      className="glass-input min-h-[100px]"
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+              </div>
+
+              {/* Booking Summary Panel for Step 3 */}
+              <Card className="glass-card border-0">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <CheckCircle className="w-5 h-5" />
+                    Booking Summary
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-wellness-calm/10 to-wellness-peaceful/10">
+                      <User className="w-5 h-5 text-wellness-calm" />
+                      <div>
+                        <p className="font-medium text-sm">Counselor</p>
+                        <p className="text-sm text-muted-foreground">
+                          {counselors.find(c => c.id === selectedCounselor)?.name}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-wellness-serene/10 to-wellness-warm/10">
+                      <CalendarIcon className="w-5 h-5 text-wellness-serene" />
+                      <div>
+                        <p className="font-medium text-sm">Date</p>
+                        <p className="text-sm text-muted-foreground">
+                          {selectedDate ? format(selectedDate, 'MMMM d, yyyy') : 'Not selected'}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-wellness-peaceful/10 to-wellness-warm/10">
+                      <Clock className="w-5 h-5 text-wellness-peaceful" />
+                      <div>
+                        <p className="font-medium text-sm">Time</p>
+                        <p className="text-sm text-muted-foreground">
+                          {bookingData.timeSlot}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-wellness-warm/10 to-wellness-serene/10">
+                      {sessionTypes.find(t => t.value === bookingData.sessionType)?.icon && (
+                        React.createElement(sessionTypes.find(t => t.value === bookingData.sessionType)!.icon, { className: "w-5 h-5 text-wellness-warm" })
+                      )}
+                      <div>
+                        <p className="font-medium text-sm">Session Type</p>
+                        <p className="text-sm text-muted-foreground">
+                          {sessionTypes.find(t => t.value === bookingData.sessionType)?.label}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="pt-4 border-t border-white/20">
+                    <Button 
+                      onClick={handleBookingSubmit}
+                      disabled={!bookingData.reason}
+                      className="w-full btn-hero"
+                    >
+                      Confirm Booking
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
 
             <div className="flex justify-center gap-4">
               <Button onClick={() => setStep(2)} variant="outline" className="btn-glass">
                 Back to Date & Time
-              </Button>
-              <Button 
-                onClick={handleBookingSubmit}
-                disabled={!bookingData.reason}
-                className="btn-hero"
-              >
-                Confirm Booking
-                <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </div>
           </div>
