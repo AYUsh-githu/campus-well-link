@@ -30,7 +30,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, userType }) 
     { title: 'AI Assistant', url: '/student-dashboard/ai', icon: Brain },
     { title: 'Dashboard', url: '/student-dashboard', icon: Home },
     { title: 'Resources', url: '/student-dashboard/resources', icon: BookOpen },
-    { title: 'Self-Care', url: '/student-dashboard/self-care', icon: Heart },
+    { title: 'Self-Care', url: '/self-care-hub', icon: Heart },
     { title: 'Book Session', url: '/student-dashboard/booking', icon: Calendar },
   ];
 
