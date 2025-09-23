@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { useNavigate } from 'react-router-dom';
 import { 
   Bot, 
   Send, 
@@ -48,6 +49,7 @@ const aiInsights = [
 ];
 
 export const AIInterfaceStandalone: React.FC = () => {
+  const navigate = useNavigate();
   const [message, setMessage] = useState('');
   const [chatMessages, setChatMessages] = useState([
     { role: 'ai', content: 'Hello! I\'m your AI wellness companion. How can I help you today?' }
@@ -197,7 +199,11 @@ export const AIInterfaceStandalone: React.FC = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            <Button variant="outline" className="w-full justify-start">
+            <Button 
+              variant="outline" 
+              className="w-full justify-start"
+              onClick={() => navigate('/mood-checkin')}
+            >
               <Bot className="w-4 h-4 mr-2" />
               Mood Check-in
             </Button>
