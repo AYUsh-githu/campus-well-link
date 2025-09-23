@@ -29,6 +29,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, userType }) 
   const studentItems = [
     { title: 'AI Assistant', url: '/student-dashboard/ai', icon: Brain },
     { title: 'Dashboard', url: '/student-dashboard', icon: Home },
+    { title: 'Journal', url: '/journal', icon: BookOpen },
     { title: 'Resources', url: '/student-dashboard/resources', icon: BookOpen },
     { title: 'Self-Care', url: '/self-care-hub', icon: Heart },
     { title: 'Book Session', url: '/student-dashboard/booking', icon: Calendar },
