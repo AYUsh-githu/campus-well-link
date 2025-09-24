@@ -21,6 +21,7 @@ import { StudentRequests } from "./pages/StudentRequests";
 import { Alerts } from "./pages/Alerts";
 import { MoodCheckin } from "./pages/MoodCheckin";
 import { Journal } from "./pages/Journal";
+import { StressAssessment } from "./pages/StressAssessment";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -51,6 +52,7 @@ const App = () => (
             <Route path="/admin-dashboard/alerts" element={<Alerts />} />
             <Route path="/mood-checkin" element={<MoodCheckin />} />
             <Route path="/journal" element={<Journal />} />
+            <Route path="/stress-assessment" element={<StressAssessment />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

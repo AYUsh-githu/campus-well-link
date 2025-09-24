@@ -207,7 +207,11 @@ export const AIInterfaceStandalone: React.FC = () => {
               <Bot className="w-4 h-4 mr-2" />
               Mood Check-in
             </Button>
-            <Button variant="outline" className="w-full justify-start">
+            <Button 
+              variant="outline" 
+              className="w-full justify-start"
+              onClick={() => navigate('/stress-assessment')}
+            >
               <Brain className="w-4 h-4 mr-2" />
               Stress Assessment
             </Button>
