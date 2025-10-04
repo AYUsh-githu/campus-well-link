@@ -215,7 +215,11 @@ export const AIInterfaceStandalone: React.FC = () => {
               <Brain className="w-4 h-4 mr-2" />
               Stress Assessment
             </Button>
-            <Button variant="outline" className="w-full justify-start">
+            <Button 
+              variant="outline" 
+              className="w-full justify-start"
+              onClick={() => navigate('/wellness-plan')}
+            >
               <Activity className="w-4 h-4 mr-2" />
               Wellness Plan
             </Button>
