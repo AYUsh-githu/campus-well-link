@@ -126,7 +126,11 @@ const exercises: Exercise[] = [
   }
 ];
 
-export const MovementExercises: React.FC = () => {
+interface MovementExercisesProps {
+  onBack?: () => void;
+}
+
+export const MovementExercises: React.FC<MovementExercisesProps> = ({ onBack }) => {
   const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(null);
   const [currentStep, setCurrentStep] = useState(0);
 
