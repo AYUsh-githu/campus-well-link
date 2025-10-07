@@ -186,6 +186,12 @@ export const SelfCareHub: React.FC = () => {
   };
 
   const startActivity = (activity: Activity) => {
+    // Navigate to journal page for journaling activities
+    if (activity.category === 'journaling') {
+      navigate('/journal');
+      return;
+    }
+    
     setTimer({
       isActive: true,
       timeLeft: activity.duration * 60,
