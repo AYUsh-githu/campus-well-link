@@ -13,8 +13,11 @@ import {
   TrendingUp,
   MessageCircle,
   Zap,
-  Target
+  Target,
+  Maximize2,
+  Minimize2
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 
 const mockData = [
@@ -55,6 +58,7 @@ export const AIInterfaceStandalone: React.FC = () => {
     { role: 'ai', content: 'Hello! I\'m your AI wellness companion. How can I help you today?' }
   ]);
   const [isTyping, setIsTyping] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const handleSendMessage = async () => {
     if (!message.trim()) return;
@@ -76,60 +80,92 @@ export const AIInterfaceStandalone: React.FC = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      {/* Chat Interface */}
-      <div className="lg:col-span-2 space-y-4">
-        <Card className="glass-card border-0">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <MessageCircle className="w-5 h-5 text-wellness-calm" />
-              Chat with AI
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="h-64 overflow-y-auto space-y-3 p-4 bg-muted/30 rounded-xl">
-              {chatMessages.map((msg, index) => (
-                <div
-                  key={index}
-                  className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+    <>
+      {/* Overlay when expanded */}
+      <AnimatePresence>
+        {isExpanded && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 z-40"
+            onClick={() => setIsExpanded(false)}
+          />
+        )}
+      </AnimatePresence>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Chat Interface */}
+        <motion.div 
+          className={`lg:col-span-2 space-y-4 ${isExpanded ? 'fixed inset-4 z-50 lg:inset-8' : ''}`}
+          layout
+          transition={{ type: "spring", damping: 25, stiffness: 200 }}
+        >
+          <Card className={`glass-card border-0 ${isExpanded ? 'h-full flex flex-col' : ''}`}>
+            <CardHeader className="flex-shrink-0">
+              <div className="flex items-center justify-between">
+                <CardTitle className="flex items-center gap-2">
+                  <MessageCircle className="w-5 h-5 text-wellness-calm" />
+                  Chat with AI
+                </CardTitle>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  className="h-8 w-8"
                 >
+                  {isExpanded ? (
+                    <Minimize2 className="w-4 h-4" />
+                  ) : (
+                    <Maximize2 className="w-4 h-4" />
+                  )}
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent className={`space-y-4 ${isExpanded ? 'flex-1 flex flex-col' : ''}`}>
+              <div className={`${isExpanded ? 'flex-1' : 'h-64'} overflow-y-auto space-y-3 p-4 bg-muted/30 rounded-xl`}>
+                {chatMessages.map((msg, index) => (
                   <div
-                    className={`max-w-[80%] p-3 rounded-2xl ${
-                      msg.role === 'user'
-                        ? 'bg-gradient-primary text-white'
-                        : 'bg-card border border-border'
-                    }`}
+                    key={index}
+                    className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                   >
-                    <p className="text-sm">{msg.content}</p>
-                  </div>
-                </div>
-              ))}
-              {isTyping && (
-                <div className="flex justify-start">
-                  <div className="bg-card border border-border p-3 rounded-2xl">
-                    <div className="flex gap-1">
-                      <div className="w-2 h-2 bg-wellness-calm rounded-full animate-bounce" />
-                      <div className="w-2 h-2 bg-wellness-calm rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
-                      <div className="w-2 h-2 bg-wellness-calm rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+                    <div
+                      className={`max-w-[80%] p-3 rounded-2xl ${
+                        msg.role === 'user'
+                          ? 'bg-gradient-primary text-white'
+                          : 'bg-card border border-border'
+                      }`}
+                    >
+                      <p className="text-sm">{msg.content}</p>
                     </div>
                   </div>
-                </div>
-              )}
-            </div>
-            <div className="flex gap-2">
-              <Input
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Ask about your wellness..."
-                onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                className="flex-1"
-              />
-              <Button onClick={handleSendMessage} className="px-6">
-                <Send className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+                ))}
+                {isTyping && (
+                  <div className="flex justify-start">
+                    <div className="bg-card border border-border p-3 rounded-2xl">
+                      <div className="flex gap-1">
+                        <div className="w-2 h-2 bg-wellness-calm rounded-full animate-bounce" />
+                        <div className="w-2 h-2 bg-wellness-calm rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
+                        <div className="w-2 h-2 bg-wellness-calm rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="flex gap-2 flex-shrink-0">
+                <Input
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  placeholder="Ask about your wellness..."
+                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                  className="flex-1"
+                />
+                <Button onClick={handleSendMessage} className="px-6">
+                  <Send className="w-4 h-4" />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
 
         {/* AI Insights */}
         <Card className="glass-card border-0">
@@ -153,10 +189,10 @@ export const AIInterfaceStandalone: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-      </div>
+        </motion.div>
 
-      {/* Analytics Dashboard */}
-      <div className="space-y-4">
+        {/* Analytics Dashboard */}
+        <div className={`space-y-4 ${isExpanded ? 'hidden' : ''}`}>
         <Card className="glass-card border-0">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -242,7 +278,8 @@ export const AIInterfaceStandalone: React.FC = () => {
             </div>
           </CardContent>
         </Card>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
