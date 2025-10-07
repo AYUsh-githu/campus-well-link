@@ -26,6 +26,7 @@ import {
 } from 'lucide-react';
 import { BreathingExercise } from '@/components/BreathingExercise';
 import { MovementExercises } from '@/components/MovementExercises';
+import { MindfulnessActivity } from '@/components/MindfulnessActivity';
 import { ShimmerCard } from '@/components/LoadingSpinner';
 
 interface Activity {
@@ -208,6 +209,11 @@ export const SelfCareHub: React.FC = () => {
   // Show Movement Exercises component when movement category is selected
   if (selectedCategory === 'movement') {
     return <MovementExercises onBack={() => setSelectedCategory('all')} />;
+  }
+
+  // Show Mindfulness Activity component when mindfulness category is selected
+  if (selectedCategory === 'mindfulness') {
+    return <MindfulnessActivity onBack={() => setSelectedCategory('all')} />;
   }
 
   if (isLoading) {
