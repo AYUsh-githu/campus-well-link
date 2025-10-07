@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -48,6 +49,7 @@ interface TimerState {
 }
 
 export const SelfCareHub: React.FC = () => {
+  const navigate = useNavigate();
   const [isQuickRelaxOpen, setIsQuickRelaxOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -171,6 +173,11 @@ export const SelfCareHub: React.FC = () => {
     : activities.filter(activity => activity.category === selectedCategory);
 
   const handleCategoryClick = (categoryId: string) => {
+    // Navigate to journal page for journaling category
+    if (categoryId === 'journaling') {
+      navigate('/journal');
+      return;
+    }
     setSelectedCategory(categoryId);
   };
 
