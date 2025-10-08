@@ -51,6 +51,7 @@ interface TimerState {
 export const SelfCareHub: React.FC = () => {
   const navigate = useNavigate();
   const [isQuickRelaxOpen, setIsQuickRelaxOpen] = useState(false);
+  const [isBreathingOpen, setIsBreathingOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [timer, setTimer] = useState<TimerState>({
@@ -176,6 +177,11 @@ export const SelfCareHub: React.FC = () => {
     // Navigate to journal page for journaling category
     if (categoryId === 'journaling') {
       navigate('/journal');
+      return;
+    }
+    // Open breathing exercise for breathing category
+    if (categoryId === 'breathing') {
+      setIsBreathingOpen(true);
       return;
     }
     setSelectedCategory(categoryId);
@@ -498,6 +504,11 @@ export const SelfCareHub: React.FC = () => {
         isOpen={isQuickRelaxOpen} 
         onClose={() => setIsQuickRelaxOpen(false)}
         duration={120} // 2 minutes for quick relax
+      />
+      
+      <BreathingExercise 
+        isOpen={isBreathingOpen} 
+        onClose={() => setIsBreathingOpen(false)} 
       />
     </DashboardLayout>
   );
