@@ -23,6 +23,7 @@ import { Journal } from "./pages/Journal";
 import { StressAssessment } from "./pages/StressAssessment";
 import { WellnessPlan } from "./pages/WellnessPlan";
 import { AnxietyGuide } from "./pages/AnxietyGuide";
+import { DepressionWorkbook } from "./pages/DepressionWorkbook";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -54,7 +55,8 @@ const App = () => (
             <Route path="/journal" element={<Journal />} />
             <Route path="/stress-assessment" element={<StressAssessment />} />
             <Route path="/wellness-plan" element={<WellnessPlan />} />
-            <Route path="/anxiety-guide" element={<AnxietyGuide />} />
+          <Route path="/anxiety-guide" element={<AnxietyGuide />} />
+          <Route path="/depression-workbook" element={<DepressionWorkbook />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

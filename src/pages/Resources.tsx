@@ -147,6 +147,8 @@ export const Resources: React.FC = () => {
   const handleResourceClick = (resourceId: string) => {
     if (resourceId === '1') {
       navigate('/anxiety-guide');
+    } else if (resourceId === '4') {
+      navigate('/depression-workbook');
     }
   };
 
