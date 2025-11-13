@@ -15,10 +15,13 @@ import {
   Zap,
   Target,
   Maximize2,
-  Minimize2
+  Minimize2,
+  Mic,
+  MicOff
 } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 
 const mockData = [
   { name: 'Mon', wellness: 65, anxiety: 30, mood: 70 },
@@ -59,6 +62,8 @@ export const AIInterfaceStandalone: React.FC = () => {
   ]);
   const [isTyping, setIsTyping] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [recognition, setRecognition] = useState<any>(null);
 
   const handleSendMessage = async () => {
     if (!message.trim()) return;
@@ -77,6 +82,49 @@ export const AIInterfaceStandalone: React.FC = () => {
       setChatMessages(prev => [...prev, aiResponse]);
       setIsTyping(false);
     }, 1500);
+  };
+
+  // Initialize speech recognition
+  React.useEffect(() => {
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
+      const recognitionInstance = new SpeechRecognition();
+      recognitionInstance.continuous = false;
+      recognitionInstance.interimResults = false;
+      recognitionInstance.lang = 'en-US';
+
+      recognitionInstance.onresult = (event: any) => {
+        const transcript = event.results[0][0].transcript;
+        setMessage(transcript);
+        setIsListening(false);
+      };
+
+      recognitionInstance.onerror = (event: any) => {
+        console.error('Speech recognition error:', event.error);
+        setIsListening(false);
+      };
+
+      recognitionInstance.onend = () => {
+        setIsListening(false);
+      };
+
+      setRecognition(recognitionInstance);
+    }
+  }, []);
+
+  const handleVoiceInput = () => {
+    if (!recognition) {
+      alert('Speech recognition is not supported in your browser.');
+      return;
+    }
+
+    if (isListening) {
+      recognition.stop();
+      setIsListening(false);
+    } else {
+      recognition.start();
+      setIsListening(true);
+    }
   };
 
   return (
@@ -152,17 +200,56 @@ export const AIInterfaceStandalone: React.FC = () => {
                   </div>
                 )}
               </div>
-              <div className="flex gap-2 flex-shrink-0">
-                <Input
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Ask about your wellness..."
-                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                  className="flex-1"
-                />
-                <Button onClick={handleSendMessage} className="px-6">
-                  <Send className="w-4 h-4" />
-                </Button>
+              <div className="space-y-2 flex-shrink-0">
+                {isListening && (
+                  <div className="flex items-center justify-center gap-2 text-sm text-wellness-calm animate-pulse">
+                    <div className="flex gap-1">
+                      <div className="w-1 h-4 bg-wellness-calm rounded-full animate-[pulse_0.8s_ease-in-out_infinite]" />
+                      <div className="w-1 h-6 bg-wellness-calm rounded-full animate-[pulse_0.8s_ease-in-out_infinite_0.1s]" />
+                      <div className="w-1 h-5 bg-wellness-calm rounded-full animate-[pulse_0.8s_ease-in-out_infinite_0.2s]" />
+                      <div className="w-1 h-7 bg-wellness-calm rounded-full animate-[pulse_0.8s_ease-in-out_infinite_0.3s]" />
+                      <div className="w-1 h-4 bg-wellness-calm rounded-full animate-[pulse_0.8s_ease-in-out_infinite_0.4s]" />
+                    </div>
+                    <span className="font-medium">Listening...</span>
+                  </div>
+                )}
+                <div className="flex gap-2">
+                  <Input
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    placeholder="Ask about your wellness..."
+                    onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                    className="flex-1"
+                  />
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button 
+                          onClick={handleVoiceInput} 
+                          variant={isListening ? "default" : "outline"}
+                          className={`px-4 ${isListening ? 'animate-pulse bg-wellness-calm hover:bg-wellness-calm/90' : ''}`}
+                        >
+                          {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{isListening ? 'Stop recording' : 'Start voice input'}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button onClick={handleSendMessage} className="px-6">
+                          <Send className="w-4 h-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Send message</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -207,7 +294,7 @@ export const AIInterfaceStandalone: React.FC = () => {
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                   <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" />
                   <YAxis stroke="hsl(var(--muted-foreground))" />
-                  <Tooltip 
+                  <RechartsTooltip 
                     contentStyle={{
                       backgroundColor: 'hsl(var(--card))',
                       border: '1px solid hsl(var(--border))',
