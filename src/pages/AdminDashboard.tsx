@@ -137,7 +137,7 @@ export const AdminDashboard: React.FC = () => {
                   </div>
                 </div>
               ))}
-              <Button className="w-full btn-glass" onClick={() => navigate('/alerts')}>
+              <Button className="w-full btn-glass" onClick={() => navigate('/admin-dashboard/alerts')}>
                 View All Alerts
               </Button>
             </CardContent>
