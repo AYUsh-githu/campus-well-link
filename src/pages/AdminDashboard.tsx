@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -18,6 +19,7 @@ import { ShimmerCard } from '@/components/LoadingSpinner';
 
 export const AdminDashboard: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 1500);
@@ -135,7 +137,7 @@ export const AdminDashboard: React.FC = () => {
                   </div>
                 </div>
               ))}
-              <Button className="w-full btn-glass">
+              <Button className="w-full btn-glass" onClick={() => navigate('/alerts')}>
                 View All Alerts
               </Button>
             </CardContent>
