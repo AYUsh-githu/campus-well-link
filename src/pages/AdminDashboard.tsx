@@ -202,7 +202,7 @@ export const AdminDashboard: React.FC = () => {
               <CardDescription>Create and manage mental health assessments</CardDescription>
             </CardHeader>
             <CardContent>
-              <Button className="w-full btn-primary">
+              <Button className="w-full btn-primary" onClick={() => navigate('/admin-dashboard/screening')}>
                 Manage Tests
               </Button>
             </CardContent>
@@ -217,7 +217,7 @@ export const AdminDashboard: React.FC = () => {
               <CardDescription>View detailed reports and insights</CardDescription>
             </CardHeader>
             <CardContent>
-              <Button className="w-full btn-secondary">
+              <Button className="w-full btn-secondary" onClick={() => navigate('/admin-dashboard/results')}>
                 View Reports
               </Button>
             </CardContent>
@@ -232,7 +232,7 @@ export const AdminDashboard: React.FC = () => {
               <CardDescription>Monitor student progress and requests</CardDescription>
             </CardHeader>
             <CardContent>
-              <Button className="w-full btn-glass">
+              <Button className="w-full btn-glass" onClick={() => navigate('/admin-dashboard/student-requests')}>
                 Manage Students
               </Button>
             </CardContent>
