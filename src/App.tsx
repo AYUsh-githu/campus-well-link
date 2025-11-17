@@ -15,6 +15,8 @@ import { ResourcesHub } from "./pages/ResourcesHub";
 import { SelfCareHub } from "./pages/SelfCareHub";
 import { BookSession } from "./pages/BookSession";
 import { ScreeningTests } from "./pages/ScreeningTests";
+import { AssessmentOverview } from "./pages/AssessmentOverview";
+import { AssessmentAnalytics } from "./pages/AssessmentAnalytics";
 import { Results } from "./pages/Results";
 import { StudentRequests } from "./pages/StudentRequests";
 import { Alerts } from "./pages/Alerts";
@@ -49,6 +51,8 @@ const App = () => (
             <Route path="/admin-dashboard" element={<AdminDashboard />} />
             <Route path="/admin-dashboard/resources" element={<Resources />} />
             <Route path="/admin-dashboard/screening" element={<ScreeningTests />} />
+            <Route path="/admin-dashboard/screening/overview" element={<AssessmentOverview />} />
+            <Route path="/admin-dashboard/screening/analytics" element={<AssessmentAnalytics />} />
             <Route path="/admin-dashboard/results" element={<Results />} />
             <Route path="/admin-dashboard/requests" element={<StudentRequests />} />
             <Route path="/admin-dashboard/alerts" element={<Alerts />} />

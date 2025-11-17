@@ -64,6 +64,13 @@
     --gradient-warm: linear-gradient(135deg, hsl(var(--wellness-warm)), hsl(var(--wellness-peaceful)));
     --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
     --gradient-shimmer: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+
+    /* Chart Colors */
+    --chart-1: 210 100% 65%;
+    --chart-2: 180 60% 65%;
+    --chart-3: 350 75% 60%;
+    --chart-4: 150 50% 70%;
+    --chart-5: 45 85% 75%;
   }
 
   .dark {
@@ -113,6 +120,13 @@
     --gradient-warm: linear-gradient(135deg, hsl(var(--wellness-warm)), hsl(var(--wellness-peaceful)));
     --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
     --gradient-shimmer: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+
+    /* Chart Colors (Dark) */
+    --chart-1: 210 100% 70%;
+    --chart-2: 180 50% 55%;
+    --chart-3: 350 75% 65%;
+    --chart-4: 150 40% 60%;
+    --chart-5: 45 70% 65%;
   }
 }
 
