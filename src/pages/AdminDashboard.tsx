@@ -232,7 +232,7 @@ export const AdminDashboard: React.FC = () => {
               <CardDescription>Monitor student progress and requests</CardDescription>
             </CardHeader>
             <CardContent>
-              <Button className="w-full btn-glass" onClick={() => navigate('/admin-dashboard/student-requests')}>
+              <Button className="w-full btn-glass" onClick={() => navigate('/admin-dashboard/requests')}>
                 Manage Students
               </Button>
             </CardContent>
