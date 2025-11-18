@@ -69,7 +69,10 @@ export const ScreeningTests = () => {
               Manage and monitor mental health screening assessments
             </p>
           </div>
-          <Button className="glass-card hover:scale-105 transition-all">
+          <Button 
+            className="glass-card hover:scale-105 transition-all"
+            onClick={() => navigate('/admin-dashboard/screening/create')}
+          >
             <Plus className="w-4 h-4 mr-2" />
             Create New Test
           </Button>
