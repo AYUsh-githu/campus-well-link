@@ -8,13 +8,18 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { AlertTriangle, Bell, Clock, Eye, MessageCircle, Shield, UserPlus, Check, X, ArrowUpDown } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { AssignAlertModal } from '@/components/AssignAlertModal';
+import { DismissAlertDialog } from '@/components/DismissAlertDialog';
 
 export const Alerts = () => {
   const { toast } = useToast();
   const [filterSeverity, setFilterSeverity] = useState<string>('all');
   const [sortBy, setSortBy] = useState<string>('date');
+  const [selectedAlert, setSelectedAlert] = useState<number | null>(null);
+  const [isAssignModalOpen, setIsAssignModalOpen] = useState(false);
+  const [isDismissDialogOpen, setIsDismissDialogOpen] = useState(false);
   
-  const allAlerts = [
+  const [alerts, setAlerts] = useState([
     {
       id: 1,
       type: "High Risk Score",
@@ -75,7 +80,7 @@ export const Alerts = () => {
       actionRequired: "Monitor for unusual behavior",
       testType: "Stress Assessment"
     }
-  ];
+  ]);
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
@@ -107,30 +112,63 @@ export const Alerts = () => {
     }
   };
 
-  const handleAcknowledge = (alertId: number, studentName: string) => {
+  const handleAcknowledge = (alertId: number) => {
+    setAlerts(prevAlerts =>
+      prevAlerts.map(alert =>
+        alert.id === alertId
+          ? { ...alert, status: alert.status === 'Unread' ? 'Acknowledged' : 'Acknowledged' }
+          : alert
+      )
+    );
     toast({
-      title: "Alert Acknowledged",
-      description: `Alert for ${studentName} has been acknowledged.`,
+      title: "Alert acknowledged successfully.",
     });
   };
 
-  const handleAssignCounselor = (alertId: number, studentName: string) => {
-    toast({
-      title: "Counselor Assignment",
-      description: `Opening counselor assignment for ${studentName}...`,
-    });
+  const handleAssignClick = (alertId: number) => {
+    setSelectedAlert(alertId);
+    setIsAssignModalOpen(true);
   };
 
-  const handleDismiss = (alertId: number, studentName: string) => {
-    toast({
-      title: "Alert Dismissed",
-      description: `Alert for ${studentName} has been dismissed.`,
-      variant: "destructive",
-    });
+  const handleAssignConfirm = (assignData: { assignTo: string; followUpDate: Date | undefined; notes: string }) => {
+    if (selectedAlert !== null) {
+      setAlerts(prevAlerts =>
+        prevAlerts.map(alert =>
+          alert.id === selectedAlert
+            ? { ...alert, status: 'In Review' }
+            : alert
+        )
+      );
+      toast({
+        title: "Alert assigned successfully.",
+      });
+      setIsAssignModalOpen(false);
+      setSelectedAlert(null);
+    }
+  };
+
+  const handleDismissClick = (alertId: number) => {
+    setSelectedAlert(alertId);
+    setIsDismissDialogOpen(true);
+  };
+
+  const handleDismissConfirm = () => {
+    if (selectedAlert !== null) {
+      setAlerts(prevAlerts => prevAlerts.filter(alert => alert.id !== selectedAlert));
+      toast({
+        title: "Alert dismissed.",
+      });
+      setIsDismissDialogOpen(false);
+      setSelectedAlert(null);
+    }
+  };
+
+  const getSelectedAlertData = () => {
+    return alerts.find(alert => alert.id === selectedAlert);
   };
 
   // Filter and sort alerts
-  const filteredAlerts = allAlerts
+  const filteredAlerts = alerts
     .filter(alert => filterSeverity === 'all' || alert.severity === filterSeverity)
     .sort((a, b) => {
       if (sortBy === 'date') {
@@ -143,9 +181,9 @@ export const Alerts = () => {
     });
 
   const stats = {
-    total: allAlerts.length,
-    critical: allAlerts.filter(a => a.severity === 'Critical').length,
-    unread: allAlerts.filter(a => a.status === 'Unread').length,
+    total: alerts.length,
+    critical: alerts.filter(a => a.severity === 'Critical').length,
+    unread: alerts.filter(a => a.status === 'Unread').length,
   };
 
   return (
@@ -278,16 +316,17 @@ export const Alerts = () => {
                           <Button 
                             size="sm" 
                             variant="outline"
-                            onClick={() => handleAcknowledge(alert.id, alert.studentName)}
+                            onClick={() => handleAcknowledge(alert.id)}
+                            disabled={alert.status === 'Acknowledged'}
                             className="flex-1 lg:flex-none lg:w-[140px]"
                           >
                             <Check className="w-4 h-4 mr-2" />
-                            Acknowledge
+                            {alert.status === 'Acknowledged' ? 'Acknowledged' : 'Acknowledge'}
                           </Button>
                           <Button 
                             size="sm" 
                             variant="default"
-                            onClick={() => handleAssignCounselor(alert.id, alert.studentName)}
+                            onClick={() => handleAssignClick(alert.id)}
                             className="flex-1 lg:flex-none lg:w-[140px]"
                           >
                             <UserPlus className="w-4 h-4 mr-2" />
@@ -296,7 +335,7 @@ export const Alerts = () => {
                           <Button 
                             size="sm" 
                             variant="destructive"
-                            onClick={() => handleDismiss(alert.id, alert.studentName)}
+                            onClick={() => handleDismissClick(alert.id)}
                             className="flex-1 lg:flex-none lg:w-[140px]"
                           >
                             <X className="w-4 h-4 mr-2" />
@@ -312,6 +351,26 @@ export const Alerts = () => {
           </CardContent>
         </Card>
       </div>
+
+      <AssignAlertModal
+        isOpen={isAssignModalOpen}
+        onClose={() => {
+          setIsAssignModalOpen(false);
+          setSelectedAlert(null);
+        }}
+        onConfirm={handleAssignConfirm}
+        studentName={getSelectedAlertData()?.studentName || ''}
+        alertDetails={getSelectedAlertData()?.message || ''}
+      />
+
+      <DismissAlertDialog
+        isOpen={isDismissDialogOpen}
+        onClose={() => {
+          setIsDismissDialogOpen(false);
+          setSelectedAlert(null);
+        }}
+        onConfirm={handleDismissConfirm}
+      />
     </DashboardLayout>
   );
 };
