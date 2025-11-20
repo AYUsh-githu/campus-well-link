@@ -9,6 +9,7 @@ import { StudentLogin } from "./pages/StudentLogin";
 import { AdminLogin } from "./pages/AdminLogin";
 import { StudentDashboard } from "./pages/StudentDashboard";
 import { AdminDashboard } from "./pages/AdminDashboard";
+import { AdminCalendar } from "./pages/AdminCalendar";
 import { AIAssistant } from "./pages/AIAssistant";
 import { Resources } from "./pages/Resources";
 import { ResourcesHub } from "./pages/ResourcesHub";
@@ -50,6 +51,7 @@ const App = () => (
             <Route path="/self-care-hub" element={<SelfCareHub />} />
             <Route path="/student-dashboard/booking" element={<BookSession />} />
             <Route path="/admin-dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/calendar" element={<AdminCalendar />} />
             <Route path="/admin-dashboard/resources" element={<Resources />} />
             <Route path="/admin-dashboard/screening" element={<ScreeningTests />} />
             <Route path="/admin-dashboard/screening/create" element={<CreateScreeningTest />} />

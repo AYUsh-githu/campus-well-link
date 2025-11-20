@@ -184,7 +184,10 @@ export const AdminDashboard: React.FC = () => {
                   </div>
                 </div>
               ))}
-              <Button className="w-full btn-glass">
+              <Button 
+                className="w-full btn-glass"
+                onClick={() => navigate('/admin/calendar')}
+              >
                 View Full Calendar
               </Button>
             </CardContent>
