@@ -41,7 +41,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const toggleTheme = (x: number, y: number) => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     
-    // Create radial expansion overlay
+    // Create fade overlay
     const overlay = document.createElement('div');
     overlay.style.position = 'fixed';
     overlay.style.width = '100vw';
@@ -50,43 +50,29 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     overlay.style.left = '0';
     overlay.style.pointerEvents = 'none';
     overlay.style.zIndex = '9998';
-    overlay.style.overflow = 'hidden';
+    overlay.style.backgroundColor = newTheme === 'dark' ? 'hsl(240 10% 3.9%)' : 'hsl(0 0% 100%)';
+    overlay.style.opacity = '0';
+    overlay.style.transition = 'opacity 0.4s ease-in-out';
     
-    const circle = document.createElement('div');
-    circle.style.position = 'absolute';
-    circle.style.left = `${x}px`;
-    circle.style.top = `${y}px`;
-    circle.style.width = '0';
-    circle.style.height = '0';
-    circle.style.borderRadius = '50%';
-    circle.style.transform = 'translate(-50%, -50%)';
-    circle.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
-    circle.style.backgroundColor = newTheme === 'dark' ? 'hsl(240 10% 3.9%)' : 'hsl(0 0% 100%)';
-    
-    overlay.appendChild(circle);
     document.body.appendChild(overlay);
     
-    // Calculate the distance needed to cover entire screen from click point
-    const maxDistance = Math.sqrt(
-      Math.pow(Math.max(x, window.innerWidth - x), 2) + 
-      Math.pow(Math.max(y, window.innerHeight - y), 2)
-    ) * 2.5;
-    
-    // Trigger animation
+    // Fade in
     requestAnimationFrame(() => {
-      circle.style.width = `${maxDistance}px`;
-      circle.style.height = `${maxDistance}px`;
+      overlay.style.opacity = '1';
     });
     
-    // Change theme midway through animation
+    // Change theme midway through fade
     setTimeout(() => {
       setTheme(newTheme);
-    }, 400);
+    }, 200);
     
-    // Clean up
+    // Fade out and clean up
     setTimeout(() => {
-      overlay.remove();
-    }, 800);
+      overlay.style.opacity = '0';
+      setTimeout(() => {
+        overlay.remove();
+      }, 400);
+    }, 200);
   };
 
   return (
