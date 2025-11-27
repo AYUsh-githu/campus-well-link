@@ -4,7 +4,7 @@ type Theme = 'light' | 'dark';
 
 interface ThemeContextType {
   theme: Theme;
-  toggleTheme: () => void;
+  toggleTheme: (x: number, y: number) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -38,8 +38,45 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   }, [theme]);
 
-  const toggleTheme = () => {
-    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+  const toggleTheme = (x: number, y: number) => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    
+    // Check if View Transitions API is supported
+    if (document.startViewTransition) {
+      const transition = document.startViewTransition(() => {
+        setTheme(newTheme);
+      });
+    } else {
+      // Fallback: create manual ripple effect
+      const ripple = document.createElement('div');
+      ripple.style.position = 'fixed';
+      ripple.style.left = `${x}px`;
+      ripple.style.top = `${y}px`;
+      ripple.style.width = '0';
+      ripple.style.height = '0';
+      ripple.style.borderRadius = '50%';
+      ripple.style.transform = 'translate(-50%, -50%)';
+      ripple.style.pointerEvents = 'none';
+      ripple.style.zIndex = '9999';
+      ripple.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+      ripple.style.backgroundColor = newTheme === 'dark' ? '#1a1a1a' : '#ffffff';
+      
+      document.body.appendChild(ripple);
+      
+      // Trigger animation
+      requestAnimationFrame(() => {
+        const maxDimension = Math.max(window.innerWidth, window.innerHeight) * 2.5;
+        ripple.style.width = `${maxDimension}px`;
+        ripple.style.height = `${maxDimension}px`;
+        
+        setTimeout(() => {
+          setTheme(newTheme);
+          setTimeout(() => {
+            ripple.remove();
+          }, 100);
+        }, 300);
+      });
+    }
   };
 
   return (
